@@ -8,6 +8,7 @@ if not pygame.font: print 'Warning fonts disabled'
 if not pygame.mixer: print'Warning sound disabled'
 
 #functions to create resources
+
 def load_image(name, colorkey=None):
    fullname = os.path.join('data',name)
    try:
@@ -35,13 +36,16 @@ def load_sound(name):
       raise SystemExit, message
    return sound
 
+
+# Classes start here
+
 class Hero(pygame.sprite.Sprite):
    """Our main hero follows the mouse"""
    
    def __init__(self):
       self.polarity = True
       pygame.sprite.Sprite.__init__(self) # Sprite initializer
-      self.image, self.rect = load_image('rocket.png', -1)
+      self.image, self.rect = load_image('fire.png', -1)
 
    def update(self):
       """move based on mouse position"""
@@ -57,27 +61,44 @@ class Hero(pygame.sprite.Sprite):
    def get_polarity(self):
       return self.polarity
 
+
+
 class Enemy(pygame.sprite.Sprite):
    """Balls of power that want to kill you 
       They are attracted or repelled by polarity
    """
-   def __init__(self, pol):
+   
+
+   def __init__(self, xpos, ypos, pol, hero):
+      self.hero = Hero()
+      self.x = xpos
+      self.y = ypos
       self.polarity = pol
       pygame.sprite.Sprite.__init__(self)
+      
       self.image, self.rect = load_image('fire.png', -1)
 
    def update(self):
       if self.polarity == True:
          pass
+      if self.polarity == False:
+         pass
 
-   
-      
+   def set_position(self, xpos, ypos):
+      self.x = xpos
+      self.y = ypos
 
-
+"""   def follow_hero():
+      x,y = pygame.mouse.get_pos()
+      dx = self.hero.x - x
+      dy = self.hero.y - y
+      self.x = dx / 5
+      self.y = dx / 5
+"""
 
 def main():
    pygame.init()
-   screen = pygame.display.set_mode((500,500))
+   screen = pygame.display.set_mode((800,800))
    pygame.display.set_caption('Magnet')
    pygame.mouse.set_visible(0)
 
@@ -95,15 +116,24 @@ def main():
    pygame.display.flip()
 
    magnet = Hero()
-   ball = Enemy(True)
-   allsprites = pygame.sprite.RenderPlain((magnet, ball))
+   ball = Enemy(500,500, True, magnet)
+
+   # Set up enemy lists
+   enemies = []
+   x = 0
+   
+   for count in range(10):
+      enemies.append(Enemy(50 * x + 50, -200, 'fire.png', magnet))
+      x +=10
+   #rendering list
+   allsprites = pygame.sprite.RenderPlain((magnet, enemies, ball))
    clock = pygame.time.Clock()
 
 
    #main loop
    while 1:
       clock.tick(60)
-
+      
       for event in pygame.event.get():
          if event.type == QUIT:
             return
