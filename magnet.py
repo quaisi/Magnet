@@ -65,7 +65,7 @@ def main():
 
    background = pygame.Surface(screen.get_size())
    background = background.convert()
-   background.fill((250, 250,250))
+   background.fill((0,0,0))
 
    if pygame.font:
       font = pygame.font.Font(None, 36)
