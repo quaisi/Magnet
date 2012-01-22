@@ -1,6 +1,6 @@
 #!/bin/usr/env = python
 
-import os
+import os, random
 import pygame
 from pygame.locals import *
 
@@ -61,40 +61,45 @@ class Hero(pygame.sprite.Sprite):
    def get_polarity(self):
       return self.polarity
 
-
+   def get_pos(self):
+      self.x, self.y = pygame.mouse.get_pos()
+      return self.x, self.y
 
 class Enemy(pygame.sprite.Sprite):
-   """Balls of power that want to kill you 
+   """Balls of power
       They are attracted or repelled by polarity
    """
-   
-
-   def __init__(self, xpos, ypos, pol, hero):
-      self.hero = Hero()
-      self.x = xpos
-      self.y = ypos
-      self.polarity = pol
+   def __init__(self, xpos, ypos):
       pygame.sprite.Sprite.__init__(self)
       
-      self.image, self.rect = load_image('fire.png', -1)
-
-   def update(self):
-      if self.polarity == True:
-         pass
-      if self.polarity == False:
-         pass
-
-   def set_position(self, xpos, ypos):
       self.x = xpos
       self.y = ypos
 
-"""   def follow_hero():
-      x,y = pygame.mouse.get_pos()
-      dx = self.hero.x - x
-      dy = self.hero.y - y
-      self.x = dx / 5
-      self.y = dx / 5
-"""
+      self.image, self.rect = load_image('fire.png', -1)
+      self.xmoveamount = random.randint(-3,3)
+      self.ymoveamount = random.randint(1,3)
+
+   def set_position(self, xpos, ypos):
+       self.x = xpos
+       self.y = ypos
+   
+   def move(self):
+      self.x += self.xmoveamount
+      self.y += self.ymoveamount
+      if self.x > 800:
+         self.xmoveamount = random.randint(-5, -1)
+      if self.x < 10:
+         self.smoveamount = random.randint(1,5)
+      if self.y > 800:
+         self.ymoveamount = random.randint(-5,-1)
+      if self.y < 10:
+         self.ymoveamount = random.randint(1,5)
+
+
+   def update(self):
+      self.move()
+
+   
 
 def main():
    pygame.init()
@@ -116,17 +121,14 @@ def main():
    pygame.display.flip()
 
    magnet = Hero()
-   ball = Enemy(500,500, True, magnet)
+   ball = Enemy(400,400) # Needed now? 500,500, True, magnet)
 
-   # Set up enemy lists
-   enemies = []
-   x = 0
    
-   for count in range(10):
-      enemies.append(Enemy(50 * x + 50, -200, 'fire.png', magnet))
-      x +=10
+
    #rendering list
-   allsprites = pygame.sprite.RenderPlain((magnet, enemies, ball))
+   allgroup = pygame.sprite.Group()
+   enemygroup = pygame.sprite.Group()
+   allsprites = pygame.sprite.RenderPlain((magnet, ball))
    clock = pygame.time.Clock()
 
 
