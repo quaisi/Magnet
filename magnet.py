@@ -53,6 +53,24 @@ class Hero(pygame.sprite.Sprite):
          self.polarity = False
       else:
          self.polarity = True
+
+   def get_polarity(self):
+      return self.polarity
+
+class Enemy(pygame.sprite.Sprite):
+   """Balls of power that want to kill you 
+      They are attracted or repelled by polarity
+   """
+   def __init__(self, pol):
+      self.polarity = pol
+      pygame.sprite.Sprite.__init__(self)
+      self.image, self.rect = load_image('fire.png', -1)
+
+   def update(self):
+      if self.polarity == True:
+         pass
+
+   
       
 
 
@@ -77,7 +95,8 @@ def main():
    pygame.display.flip()
 
    magnet = Hero()
-   allsprites = pygame.sprite.RenderPlain((magnet))
+   ball = Enemy(True)
+   allsprites = pygame.sprite.RenderPlain((magnet, ball))
    clock = pygame.time.Clock()
 
 
