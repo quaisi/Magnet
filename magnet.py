@@ -78,6 +78,7 @@ class Enemy(pygame.sprite.Sprite):
       self.image, self.rect = load_image('fire.png', -1)
       self.xmoveamount = random.randint(-3,3)
       self.ymoveamount = random.randint(1,3)
+      screen = pygame.display.get_surface()
 
    def set_position(self, xpos, ypos):
        self.x = xpos
@@ -88,8 +89,8 @@ class Enemy(pygame.sprite.Sprite):
            
       mousex,mousey = pygame.mouse.get_pos()
       
-      dx = self.x - mousex
-      dy = self.y - mousey
+      dx = (self.x - mousex) * 2
+      dy = (self.y - mousey) * 2
 
       if self.polarity == True:
          self.x -= dx / 18
@@ -98,6 +99,8 @@ class Enemy(pygame.sprite.Sprite):
          self.x += dx / 5
          self.y += dx / 5
       
+      #if self.x > MAXX:
+
       self.rect.midtop = (self.x,self.y)
       
    def update(self):
@@ -107,7 +110,10 @@ class Enemy(pygame.sprite.Sprite):
 
 def main():
    pygame.init()
-   screen = pygame.display.set_mode((800,800))
+   MAXX = 800
+   MAXY = 800
+   
+   screen = pygame.display.set_mode((MAXX, MAXY))
    pygame.display.set_caption('Magnet')
    pygame.mouse.set_visible(0)
 
@@ -117,7 +123,7 @@ def main():
 
    if pygame.font:
       font = pygame.font.Font(None, 36)
-      text = font.render("This is my test text", 1,(10,10,10))
+      text = font.render("Score", 1,(255,255,255))
       textpos = text.get_rect(centerx = background.get_width()/2)
       background.blit(text, textpos)
 
@@ -125,14 +131,20 @@ def main():
    pygame.display.flip()
 
    magnet = Hero()
-   ball = Enemy(400,400) # Needed now? 500,500, True, magnet)
-
+   ball1 = Enemy(400, 400) # Needed now? 500,500, True, magnet)
+   ball2 = Enemy(800, 500)
+   ball3 = Enemy(250,250)
+   ball4 = Enemy(300,700)
+   ball5 = Enemy(632, 786)
+   ball6 = Enemy(20,20)
+   enemies = pygame.sprite.RenderPlain((ball1, ball2, ball3, ball4,
+      ball5, ball6))
    
 
    #rendering list
    allgroup = pygame.sprite.Group()
    enemygroup = pygame.sprite.Group()
-   allsprites = pygame.sprite.RenderPlain((magnet, ball))
+   allsprites = pygame.sprite.RenderPlain((magnet, enemies))
    clock = pygame.time.Clock()
 
 
