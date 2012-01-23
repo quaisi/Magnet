@@ -89,12 +89,13 @@ class Enemy(pygame.sprite.Sprite):
            
       mousex,mousey = pygame.mouse.get_pos()
       
-      dx = (self.x - mousex) * 2
-      dy = (self.y - mousey) * 2
+      dx = self.x - mousex
+      dy = self.y - mousey
+      print (dx,dy)
 
       if self.polarity == True:
-         self.x -= dx / 18
-         self.y -= dy / 18
+         self.x -= dx / 20
+         self.y -= dy / 20
       else:
          self.x += dx / 5
          self.y += dx / 5
@@ -131,27 +132,34 @@ def main():
    pygame.display.flip()
 
    magnet = Hero()
-   ball1 = Enemy(400, 400) # Needed now? 500,500, True, magnet)
+   """ball1 = Enemy(400, 400) # Needed now? 500,500, True, magnet)
    ball2 = Enemy(800, 500)
    ball3 = Enemy(250,250)
    ball4 = Enemy(300,700)
    ball5 = Enemy(632, 786)
    ball6 = Enemy(20,20)
    enemies = pygame.sprite.RenderPlain((ball1, ball2, ball3, ball4,
-      ball5, ball6))
+      ball5, ball6))"""
    
 
    #rendering list
    allgroup = pygame.sprite.Group()
    enemygroup = pygame.sprite.Group()
-   allsprites = pygame.sprite.RenderPlain((magnet, enemies))
+   allsprites = pygame.sprite.RenderPlain((magnet))#, enemies))
    clock = pygame.time.Clock()
-
-
-   #main loop
+   
+   #hit_list = pygame.sprite.groupcollide((enemies,  enemies,1,1))
+   
+   #counter to generate new enemy every counter times through main loop
+   counter = 0
+   enemygroup.add(Enemy(random.randint(0,MAXX), \
+         random.randint(0,MAXY)))
+   
+   
+   #main loop---------------------------------------------------------
    while 1:
       clock.tick(60)
-      
+            
       for event in pygame.event.get():
          if event.type == QUIT:
             return
@@ -159,11 +167,19 @@ def main():
             magnet.change_polarity()
       
       allsprites.update()
+      enemygroup.update()
 
       #Draw all
       screen.blit(background, (0,0))
       allsprites.draw(screen)
+      enemygroup.draw(screen)
       pygame.display.flip()
+
+      counter += 1
+      if counter >=50:
+         counter = 0
+         enemygroup.add(Enemy(random.randint(0,MAXX),
+            random.randint(0,MAXY)))
 
 if __name__ == '__main__':
    main()
