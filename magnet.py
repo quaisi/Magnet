@@ -74,7 +74,7 @@ class Enemy(pygame.sprite.Sprite):
       
       self.x = xpos
       self.y = ypos
-
+      self.polarity = True
       self.image, self.rect = load_image('fire.png', -1)
       self.xmoveamount = random.randint(-3,3)
       self.ymoveamount = random.randint(1,3)
@@ -84,19 +84,6 @@ class Enemy(pygame.sprite.Sprite):
        self.y = ypos
    
    def move(self):
-      """self.rect.midtop = (self.x,self.y)
-      self.x += self.xmoveamount
-      self.y += self.ymoveamount
-      if self.x > 800:
-         self.xmoveamount = random.randint(-5, -1)
-      if self.x < 10:
-         self.smoveamount = random.randint(1,5)
-      if self.y > 800:
-         self.ymoveamount = random.randint(-5,-1)
-      if self.y < 10:
-         self.ymoveamount = random.randint(1,5)"""
-
-   def move(self):
       self.rect.midtop = (self.x, self.y)
            
       mousex,mousey = pygame.mouse.get_pos()
@@ -104,13 +91,14 @@ class Enemy(pygame.sprite.Sprite):
       dx = self.x - mousex
       dy = self.y - mousey
 
-      self.x -= dx / 18
-      self.y -= dy / 18
+      if self.polarity == True:
+         self.x -= dx / 18
+         self.y -= dy / 18
+      else:
+         self.x += dx / 5
+         self.y += dx / 5
       
       self.rect.midtop = (self.x,self.y)
-      
-      #self.x, self.y = self.rect.midtop 
-      #self.rect.midtop -= dx / 5, -=dy /5
       
    def update(self):
       self.move()
