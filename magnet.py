@@ -7,6 +7,7 @@ from pygame.locals import *
 if not pygame.font: print 'Warning fonts disabled'
 if not pygame.mixer: print'Warning sound disabled'
 
+
 #functions to create resources
 
 def load_image(name, colorkey=None):
@@ -43,7 +44,7 @@ class Hero(pygame.sprite.Sprite):
    """Our main hero follows the mouse"""
    
    def __init__(self):
-      self.polarity = True
+      #self.polarity = True
       pygame.sprite.Sprite.__init__(self) # Sprite initializer
       self.image, self.rect = load_image('fire.png', -1)
 
@@ -53,13 +54,13 @@ class Hero(pygame.sprite.Sprite):
       self.rect.midtop = pos
 
    def change_polarity(self):
-      if self.polarity == True:
-         self.polarity = False
+      if polarity == True:
+         polarity = False
       else:
-         self.polarity = True
+         polarity = True
 
-   def get_polarity(self):
-      return self.polarity
+   #def get_polarity(self):
+    #  return polarity
 
    def get_pos(self):
       self.x, self.y = pygame.mouse.get_pos()
@@ -69,12 +70,12 @@ class Enemy(pygame.sprite.Sprite):
    """Balls of power
       They are attracted or repelled by polarity
    """
-   def __init__(self, xpos, ypos):
+   def __init__(self, xpos, ypos, polarity):
       pygame.sprite.Sprite.__init__(self)
       
       self.x = xpos
       self.y = ypos
-      self.polarity = True
+      self.polarity = polarity
       self.image, self.rect = load_image('fire.png', -1)
       self.xmoveamount = random.randint(-3,3)
       self.ymoveamount = random.randint(1,3)
@@ -91,7 +92,7 @@ class Enemy(pygame.sprite.Sprite):
       
       dx = self.x - mousex
       dy = self.y - mousey
-      print (dx,dy)
+      #print (dx,dy)
 
       if self.polarity == True:
          self.x -= dx / 20
@@ -100,7 +101,6 @@ class Enemy(pygame.sprite.Sprite):
          self.x += dx / 5
          self.y += dx / 5
       
-      #if self.x > MAXX:
 
       self.rect.midtop = (self.x,self.y)
       
@@ -110,6 +110,8 @@ class Enemy(pygame.sprite.Sprite):
    
 
 def main():
+   
+   polarity = True
    pygame.init()
    MAXX = 800
    MAXY = 800
@@ -153,7 +155,7 @@ def main():
    #counter to generate new enemy every counter times through main loop
    counter = 0
    enemygroup.add(Enemy(random.randint(0,MAXX), \
-         random.randint(0,MAXY)))
+         random.randint(0,MAXY), True))
    
    
    #main loop---------------------------------------------------------
@@ -164,8 +166,10 @@ def main():
          if event.type == QUIT:
             return
          elif event.type == MOUSEBUTTONDOWN:
-            magnet.change_polarity()
-      
+            if polarity == True:
+               polarity = False
+            else:
+               polarity = True
       allsprites.update()
       enemygroup.update()
 
@@ -179,7 +183,7 @@ def main():
       if counter >=50:
          counter = 0
          enemygroup.add(Enemy(random.randint(0,MAXX),
-            random.randint(0,MAXY)))
+            random.randint(0,MAXY), True))
 
 if __name__ == '__main__':
    main()
