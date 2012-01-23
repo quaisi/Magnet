@@ -84,6 +84,7 @@ class Enemy(pygame.sprite.Sprite):
        self.y = ypos
    
    def move(self):
+      self.rect.midtop = (self.x,self.y)
       self.x += self.xmoveamount
       self.y += self.ymoveamount
       if self.x > 800:
@@ -95,7 +96,8 @@ class Enemy(pygame.sprite.Sprite):
       if self.y < 10:
          self.ymoveamount = random.randint(1,5)
 
-
+      
+      
    def update(self):
       self.move()
 
