@@ -104,8 +104,8 @@ class Enemy(pygame.sprite.Sprite):
       dx = self.x - mousex
       dy = self.y - mousey
 
-      self.x -= dx / 5
-      self.y -= dy / 5
+      self.x -= dx / 18
+      self.y -= dy / 18
       
       self.rect.midtop = (self.x,self.y)
       
