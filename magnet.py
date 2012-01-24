@@ -38,11 +38,14 @@ def load_sound(name):
    return sound
 
 
-# Classes start here
+# Classes start here -------------------------------------------
+
 
 class Hero(pygame.sprite.Sprite):
    """Our main hero follows the mouse"""
-   
+   polarity = True
+   SCORE = 0
+
    def __init__(self):
       #self.polarity = True
       pygame.sprite.Sprite.__init__(self) # Sprite initializer
@@ -95,8 +98,8 @@ class Enemy(pygame.sprite.Sprite):
       #print (dx,dy)
 
       if self.polarity == True:
-         self.x -= dx / 20
-         self.y -= dy / 20
+         self.x -= dx / 10
+         self.y -= dy / 10
       else:
          self.x += dx / 5
          self.y += dx / 5
@@ -107,7 +110,30 @@ class Enemy(pygame.sprite.Sprite):
    def update(self):
       self.move()
 
-   
+class Score(pygame.sprite.Sprite):
+   def __init__(self):
+      pygame.sprite.Sprite.__init__(self)
+      self.font = pygame.font.Font(None, 36)
+      #self.font.set_italic(1)
+      self.color = Color('white')
+      self.lastscore = -1
+      self.update()
+      self.rect = self.image.get_rect().move(10,450)
+
+   def update(self):
+      if Hero.SCORE != self.lastscore:
+         self.lastscore = Hero.SCORE
+         msg = "Score: %d" % Hero.SCORE
+         self.image = self.font.render(msg, 0, self.color)
+      
+      """
+   if pygame.font:
+      font = pygame.font.Font(None, 36)
+      text = font.render("Score", 1,(255,255,255))
+      textpos = text.get_rect(centerx = background.get_width()/2)
+      background.blit(text, textpos)"""
+
+# Main function ---------------------------------------------------   
 
 def main():
    
@@ -124,12 +150,6 @@ def main():
    background = background.convert()
    background.fill((0,0,0))
 
-   if pygame.font:
-      font = pygame.font.Font(None, 36)
-      text = font.render("Score", 1,(255,255,255))
-      textpos = text.get_rect(centerx = background.get_width()/2)
-      background.blit(text, textpos)
-
    screen.blit(background, (0,0))
    pygame.display.flip()
 
@@ -142,12 +162,12 @@ def main():
    ball6 = Enemy(20,20)
    enemies = pygame.sprite.RenderPlain((ball1, ball2, ball3, ball4,
       ball5, ball6))"""
-   
+   score = Score()
 
    #rendering list
    allgroup = pygame.sprite.Group()
    enemygroup = pygame.sprite.Group()
-   allsprites = pygame.sprite.RenderPlain((magnet))#, enemies))
+   allsprites = pygame.sprite.RenderPlain((magnet, score))#, enemies))
    clock = pygame.time.Clock()
    
    #hit_list = pygame.sprite.groupcollide((enemies,  enemies,1,1))
@@ -160,6 +180,7 @@ def main():
    
    #main loop---------------------------------------------------------
    while 1:
+      Hero.SCORE += 1
       clock.tick(60)
             
       for event in pygame.event.get():
