@@ -47,7 +47,6 @@ class Hero(pygame.sprite.Sprite):
    SCORE = 0
 
    def __init__(self):
-      #self.polarity = True
       pygame.sprite.Sprite.__init__(self) # Sprite initializer
       self.image, self.rect = load_image('fire.png', -1)
 
@@ -57,10 +56,10 @@ class Hero(pygame.sprite.Sprite):
       self.rect.midtop = pos
 
    def change_polarity(self):
-      if polarity == True:
-         polarity = False
+      if Hero.polarity == True:
+         Hero.polarity = False
       else:
-         polarity = True
+         Hero.polarity = True
 
    #def get_polarity(self):
     #  return polarity
@@ -80,7 +79,7 @@ class Enemy(pygame.sprite.Sprite):
       self.y = ypos
       self.polarity = polarity
       self.image, self.rect = load_image('fire.png', -1)
-      self.xmoveamount = random.randint(-3,3)
+      self.xmoveamount = random.randint(-8,8)
       self.ymoveamount = random.randint(1,3)
       screen = pygame.display.get_surface()
 
@@ -95,20 +94,34 @@ class Enemy(pygame.sprite.Sprite):
       
       dx = self.x - mousex
       dy = self.y - mousey
-      #print (dx,dy)
 
-      if self.polarity == True:
+      if self.polarity == True and Hero.polarity == True:
+
+         self.x = self.x - self.xmoveamount
+         self.y = self.y - self.xmoveamount
+      elif self.polarity == True and Hero.polarity == False:
+
          self.x -= dx / 10
          self.y -= dy / 10
+      elif self.polarity == False and Hero.polarity == True:
+         self.x -= dx / 10
+         self.y -= dx / 10
       else:
-         self.x += dx / 5
-         self.y += dx / 5
-      
+         self.x = self.x + self.xmoveamount
+         self.y = self.y + self.ymoveamount
 
       self.rect.midtop = (self.x,self.y)
       
    def update(self):
       self.move()
+   
+   def isOffScreen(self):
+      if self.x < 0 or self.y >= MAXX:
+         return True
+      elif self.y <0 or self.y >= MAXY:
+         return True
+      return False
+
 
 class Score(pygame.sprite.Sprite):
    def __init__(self):
@@ -187,10 +200,10 @@ def main():
          if event.type == QUIT:
             return
          elif event.type == MOUSEBUTTONDOWN:
-            if polarity == True:
-               polarity = False
+            if Hero.polarity == True:
+               Hero.polarity = False
             else:
-               polarity = True
+               Hero.polarity = True
       allsprites.update()
       enemygroup.update()
 
