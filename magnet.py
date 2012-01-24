@@ -167,14 +167,6 @@ def main():
    pygame.display.flip()
 
    magnet = Hero()
-   """ball1 = Enemy(400, 400) # Needed now? 500,500, True, magnet)
-   ball2 = Enemy(800, 500)
-   ball3 = Enemy(250,250)
-   ball4 = Enemy(300,700)
-   ball5 = Enemy(632, 786)
-   ball6 = Enemy(20,20)
-   enemies = pygame.sprite.RenderPlain((ball1, ball2, ball3, ball4,
-      ball5, ball6))"""
    score = Score()
 
    #rendering list
@@ -217,7 +209,7 @@ def main():
       if counter >=50:
          counter = 0
          enemygroup.add(Enemy(random.randint(0,MAXX),
-            random.randint(0,MAXY), True))
+            random.randint(0,MAXY), random.choice([True, False])))
 
 if __name__ == '__main__':
    main()
