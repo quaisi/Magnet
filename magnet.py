@@ -74,7 +74,7 @@ class Enemy(pygame.sprite.Sprite):
       self.image, self.rect = load_image('fire.png', -1)
       self.xmoveamount = random.randint(-10,10)
       self.ymoveamount = random.randint(-10,10)
-      screen = pygame.display.get_surface()
+      self.screen = pygame.display.get_surface()
 
    def set_position(self, xpos, ypos):
        self.x = xpos
@@ -133,8 +133,10 @@ class Score(pygame.sprite.Sprite):
    def update(self):
       if Hero.SCORE != self.lastscore:
          self.lastscore = Hero.SCORE
-         msg = "Score: %d" % Hero.SCORE
+         
+         msg = "Score: %d" % int(Hero.SCORE)
          self.image = self.font.render(msg, 0, self.color)
+
       
       """
    if pygame.font:
@@ -146,7 +148,7 @@ class Score(pygame.sprite.Sprite):
 # Main function ---------------------------------------------------   
 
 def main():
-   
+   scores = [] 
    polarity = True
    pygame.init()
    MAXX = 800
@@ -169,13 +171,20 @@ def main():
    #rendering list
    allgroup = pygame.sprite.Group()
    enemygroup = pygame.sprite.Group()
-   allsprites = pygame.sprite.RenderPlain((magnet, score))#, enemies))
+   
+   scoregroup = pygame.sprite.RenderPlain(score)
+
+   herogroup = pygame.sprite.Group()
+   herogroup = pygame.sprite.RenderPlain((magnet))
+
+
    clock = pygame.time.Clock()
    
-   #hit_list = pygame.sprite.groupcollide((enemies,  enemies,1,1))
    
    #counter to generate new enemy every counter times through main loop
    counter = 0
+   
+   # Get an enemy on when starting
    enemygroup.add(Enemy(random.randint(0,MAXX), \
          random.randint(0,MAXY), True))
    
@@ -193,20 +202,27 @@ def main():
                Hero.polarity = False
             else:
                Hero.polarity = True
-      allsprites.update()
       enemygroup.update()
+      herogroup.update()
+      scoregroup.update()
 
+      # Check for collisions
+      if pygame.sprite.spritecollide(magnet, enemygroup, True):
+         print "Collision - Score: %d" % int(Hero.SCORE)
+         scores.append(Hero.SCORE)
+         Hero.SCORE = 0
+      
       #Draw all
       screen.blit(background, (0,0))
-      allsprites.draw(screen)
+      herogroup.draw(screen)
       enemygroup.draw(screen)
+      scoregroup.draw(screen)
       pygame.display.flip()
 
-      counter += 1
       if counter >=50:
          counter = 0
          enemygroup.add(Enemy(random.randint(0,MAXX),
             random.randint(0,MAXY), random.choice([True, False])))
-
+      counter = counter + 1
 if __name__ == '__main__':
    main()
