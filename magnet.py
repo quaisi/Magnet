@@ -105,7 +105,7 @@ class Enemy(pygame.sprite.Sprite):
          self.y -= dy / 10
       elif self.polarity == False and Hero.polarity == True:
          self.x -= dx / 10
-         self.y -= dx / 10
+         self.y -= dy / 10
       else:
          """self.x = -self.x - self.xmoveamount
          self.y = -self.y - self.ymoveamount"""
