@@ -61,13 +61,6 @@ class Hero(pygame.sprite.Sprite):
       else:
          Hero.polarity = True
 
-   #def get_polarity(self):
-    #  return polarity
-
-   def get_pos(self):
-      self.x, self.y = pygame.mouse.get_pos()
-      return self.x, self.y
-
 class Enemy(pygame.sprite.Sprite):
    """Balls of power
       They are attracted or repelled by polarity
@@ -79,8 +72,8 @@ class Enemy(pygame.sprite.Sprite):
       self.y = ypos
       self.polarity = polarity
       self.image, self.rect = load_image('fire.png', -1)
-      self.xmoveamount = random.randint(1,10)
-      self.ymoveamount = random.randint(1,10)
+      self.xmoveamount = random.randint(-10,10)
+      self.ymoveamount = random.randint(-10,10)
       screen = pygame.display.get_surface()
 
    def set_position(self, xpos, ypos):
