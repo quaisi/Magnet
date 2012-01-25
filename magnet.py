@@ -91,8 +91,6 @@ class Enemy(pygame.sprite.Sprite):
       if self.polarity == True and Hero.polarity == True:
          self.reverse_direction()
 
-         """self.x = self.x - self.xmoveamount
-         self.y = self.y - self.ymoveamount"""
       elif self.polarity == True and Hero.polarity == False:
          self.x -= dx / 10
          self.y -= dy / 10
@@ -100,8 +98,6 @@ class Enemy(pygame.sprite.Sprite):
          self.x -= dx / 10
          self.y -= dy / 10
       else:
-         """self.x = -self.x - self.xmoveamount
-         self.y = -self.y - self.ymoveamount"""
          self.reverse_direction()
 
       self.rect.midtop = (self.x,self.y)
@@ -129,6 +125,9 @@ class Score(pygame.sprite.Sprite):
       self.lastscore = -1
       self.update()
       self.rect = self.image.get_rect().move(10,450)
+      """#self.textpos = text.get_rect(centerx = background.get_width() /
+            2)"""
+
 
    def update(self):
       if Hero.SCORE != self.lastscore:
@@ -136,6 +135,7 @@ class Score(pygame.sprite.Sprite):
          
          msg = "Score: %d" % int(Hero.SCORE)
          self.image = self.font.render(msg, 0, self.color)
+         #background.blit(text, textpos)
 
       
       """
