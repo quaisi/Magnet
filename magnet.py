@@ -96,9 +96,10 @@ class Enemy(pygame.sprite.Sprite):
       dy = self.y - mousey
 
       if self.polarity == True and Hero.polarity == True:
+         self.reverse_direction()
 
-         self.x = self.x - self.xmoveamount
-         self.y = self.y - self.ymoveamount
+         """self.x = self.x - self.xmoveamount
+         self.y = self.y - self.ymoveamount"""
       elif self.polarity == True and Hero.polarity == False:
          self.x -= dx / 10
          self.y -= dy / 10
@@ -106,9 +107,10 @@ class Enemy(pygame.sprite.Sprite):
          self.x -= dx / 10
          self.y -= dx / 10
       else:
-         self.x = self.x - self.xmoveamount
-         self.y = self.y - self.ymoveamount
-         
+         """self.x = -self.x - self.xmoveamount
+         self.y = -self.y - self.ymoveamount"""
+         self.reverse_direction()
+
       self.rect.midtop = (self.x,self.y)
       
    def update(self):
@@ -120,7 +122,10 @@ class Enemy(pygame.sprite.Sprite):
       elif self.y <0 or self.y >= MAXY:
          return True
       return False
-
+   
+   def reverse_direction(self):
+      self.x = self.x - self.xmoveamount
+      self.y = self.y - self.ymoveamount
 
 class Score(pygame.sprite.Sprite):
    def __init__(self):
