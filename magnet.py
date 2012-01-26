@@ -48,7 +48,7 @@ class Hero(pygame.sprite.Sprite):
 
    def __init__(self):
       pygame.sprite.Sprite.__init__(self) # Sprite initializer
-      self.image, self.rect = load_image('hero.png', -1)
+      self.image, self.rect = load_image('fire.png', -1)
 
    def update(self):
       """move based on mouse position"""
