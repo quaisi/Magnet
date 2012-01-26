@@ -1,7 +1,7 @@
 #!/bin/usr/env = python
 
 import os, random
-import pygame
+import pygame, sys
 from pygame.locals import *
 
 if not pygame.font: print 'Warning fonts disabled'
@@ -48,7 +48,7 @@ class Hero(pygame.sprite.Sprite):
 
    def __init__(self):
       pygame.sprite.Sprite.__init__(self) # Sprite initializer
-      self.image, self.rect = load_image('fire.png', -1)
+      self.image, self.rect = load_image('hero.png', -1)
 
    def update(self):
       """move based on mouse position"""
@@ -138,13 +138,6 @@ class Score(pygame.sprite.Sprite):
          #background.blit(text, textpos)
 
       
-      """
-   if pygame.font:
-      font = pygame.font.Font(None, 36)
-      text = font.render("Score", 1,(255,255,255))
-      textpos = text.get_rect(centerx = background.get_width()/2)
-      background.blit(text, textpos)"""
-
 # Main function ---------------------------------------------------   
 
 def main():
@@ -157,6 +150,9 @@ def main():
    screen = pygame.display.set_mode((MAXX, MAXY))
    pygame.display.set_caption('Magnet')
    pygame.mouse.set_visible(0)
+   
+   #background = pygame.image.load('background.png').convert()
+   #background = pygame.transform.scale(background, displaymode)
 
    background = pygame.Surface(screen.get_size())
    background = background.convert()
@@ -196,8 +192,10 @@ def main():
             
       for event in pygame.event.get():
          if event.type == QUIT:
+            print("High Score: %d" % max(scores))
             return
          elif event.type == MOUSEBUTTONDOWN:
+            Hero.SCORE += 1000
             if Hero.polarity == True:
                Hero.polarity = False
             else:
