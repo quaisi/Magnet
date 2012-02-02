@@ -1,5 +1,12 @@
 #!/bin/usr/env = python
 
+##################################################
+#
+# Magnets 
+#
+#
+##################################################
+
 import os, random
 import pygame, sys
 from pygame.locals import *
@@ -87,10 +94,12 @@ class Enemy(pygame.sprite.Sprite):
       
       dx = self.x - mousex
       dy = self.y - mousey
-
+      if self.isOffScreen():
+         self.reverse_direction()
       if self.polarity == True and Hero.polarity == True:
          self.reverse_direction()
-
+         if self.isOffScreen():
+            self.reverse_direction()
       elif self.polarity == True and Hero.polarity == False:
          self.x -= dx / 10
          self.y -= dy / 10
@@ -106,12 +115,13 @@ class Enemy(pygame.sprite.Sprite):
       self.move()
    
    def isOffScreen(self):
-      if self.x < 0 or self.y >= MAXX:
+      if self.x < 0 or self.x >= 800:
          return True
-      elif self.y <0 or self.y >= MAXY:
+      elif self.y <0 or self.y >= 800:
          return True
-      return False
-   
+      else:
+         return False
+
    def reverse_direction(self):
       self.x = self.x - self.xmoveamount
       self.y = self.y - self.ymoveamount
@@ -151,9 +161,6 @@ def main():
    pygame.display.set_caption('Magnet')
    pygame.mouse.set_visible(0)
    
-   #background = pygame.image.load('background.png').convert()
-   #background = pygame.transform.scale(background, displaymode)
-
    background = pygame.Surface(screen.get_size())
    background = background.convert()
    background.fill((0,0,0))
